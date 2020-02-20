@@ -13,7 +13,7 @@ class EventListItem extends Component {
             <Item>
               <Item.Image size="tiny" circular src={event.hostPhotoURL} />
               <Item.Content>
-                <Item.Header as="a">Event Title</Item.Header>
+                <Item.Header as="a">{event.title}</Item.Header>
                 <Item.Description>
                   Hosted by <a>{event.hostedBy}</a>
                 </Item.Description>
@@ -24,14 +24,15 @@ class EventListItem extends Component {
         <Segment>
           <span>
             <Icon name="clock" /> {event.date} |
-            <Icon name="marker" /> {event.time}
+            <Icon name="marker" /> {event.venue}
           </span>
         </Segment>
         <Segment secondary>
           <List horizontal>
-            {event.attendees.map(attendee => (
-              <EventListAttendee key={attendee.id} attendee={attendee} />
-            ))}
+            {event.attendees &&
+              event.attendees.map(attendee => (
+                <EventListAttendee key={attendee.id} attendee={attendee} />
+              ))}
           </List>
         </Segment>
         <Segment clearing>
