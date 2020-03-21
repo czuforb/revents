@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
 import { Container } from "semantic-ui-react";
 import EventDetailedPage from "../../features/event/EventDetailed/EventDetailedPage";
@@ -10,7 +10,6 @@ import UserDetailedPage from "../../features/event/user/UserDetailed/UserDetaile
 import PeopleDashboard from "../../features/event/user/peopleDashboard/PeopleDashboard";
 import EventDashboard from "../../features/event/EventDashboard/EventDashboard";
 import SettingsDashboard from "../../features/event/user/settings/SettingsDashboard";
-import TestComponent from "../../features/test/TestComponent";
 
 class App extends Component {
   render() {
@@ -23,14 +22,18 @@ class App extends Component {
             <>
               <NavBar />
               <Container className="main">
-                <Route exact path="/events" component={EventDashboard} />
-                <Route path="/events/:id" component={EventDetailedPage} />
-                <Route path="/people" component={PeopleDashboard} />
-                <Route path="/profile/:id" component={UserDetailedPage} />
-                <Route path="/settings" component={SettingsDashboard} />
-                <Route path="/createEvent" component={EventForm} />{" "}
-                <Route path="/createEvent" component={EventForm} />
-                <Route path="/test" component={TestComponent} />
+                <Switch key={this.props.location.key}>
+                  <Route exact path="/events" component={EventDashboard} />
+                  <Route path="/events/:id" component={EventDetailedPage} />
+                  <Route path="/people" component={PeopleDashboard} />
+                  <Route path="/profile/:id" component={UserDetailedPage} />
+                  <Route path="/settings" component={SettingsDashboard} />
+                  <Route
+                    path={["/createEvent", "/manage/:id"]}
+                    component={EventForm}
+                  />
+                  {/* <Route path="/manage/:id" component={EventForm} /> */}
+                </Switch>
               </Container>
             </>
           )}
@@ -40,4 +43,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

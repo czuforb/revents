@@ -53,7 +53,7 @@ const initialState = [
 ];
 
 const createEvent = (state, payload) => {
-  return [...state, payload.state];
+  return [...state, payload.event];
 };
 
 const updateEvent = (state, payload) => {
