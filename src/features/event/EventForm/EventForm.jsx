@@ -14,7 +14,8 @@ import {
   hasLengthGreaterThan
 } from "revalidate";
 import DateInput from "../../../app/common/form/DateInput";
-
+import PlaceInput from "../../../app/common/form/PlaceInput";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 const mapState = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
   let event = {};
@@ -57,8 +58,11 @@ const category = [
 ];
 
 export class EventForm extends Component {
-  state = { ...this.props.event };
-
+  // state = { ...this.props.event };
+  state = {
+    cityLangLng: {},
+    venueLangLng: {}
+  };
   onFormSubmit = values => {
     if (this.props.initialValues.id) {
       this.props.updateEvent(values);
@@ -75,6 +79,27 @@ export class EventForm extends Component {
     }
   };
 
+  handleCitySelect = selectedCity => {
+    geocodeByAddress(selectedCity)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        this.setState({ cityLangLng: latLng });
+      })
+      .then(() => {
+        this.props.change("city", selectedCity);
+      });
+  };
+
+  handleVenueSelect = selectedVenue => {
+    geocodeByAddress(selectedVenue)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        this.setState({ venueLangLng: latLng });
+      })
+      .then(() => {
+        this.props.change("venue", selectedVenue);
+      });
+  };
   render() {
     const {
       history,
@@ -112,12 +137,15 @@ export class EventForm extends Component {
               <Header sub color="teal" content="Event location details" />
               <Field
                 name="city"
-                component={TextInput}
+                component={PlaceInput}
                 placeholder="Event city"
+                types={{ types: ["(cities)"] }}
+                onSelect={this.handleCitySelect}
               />
               <Field
                 name="venue"
-                component={TextInput}
+                component={PlaceInput}
+                options={{}}
                 placeholder="Event venue"
               />
               <Field
